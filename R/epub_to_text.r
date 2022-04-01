@@ -47,8 +47,21 @@ for (n in 1:nrow(all_text)){
   chapter <- get_chapter_name(all_text[n,])
   all_text[n,] <- chapter[1,]
 }
-all_text <- all_text %>% rename(chapter = section)
+all_pob_text <- all_text %>% rename(chapter = section)
 
-save(all_text,file="data/all_text")
+save(all_pob_text,file="data/all_pob_text.rdata")
 
-# temp <- all_text %>% mutate(text=substr(text,1,30))
+make_plain_text_file <- function(title1,corpus) {
+  print(title1)
+  corpus %>%
+    filter(title == title1) %>%
+    # unnest(cols = data) %>%
+    # append space at end of line
+    mutate(text = paste0(text, " ")) %>%
+    pull(text) %>%
+    str_flatten() %>%
+    write_file(paste0("./txt/", title1, ".txt"))
+}
+
+
+all_pob_text$title %>% walk(make_plain_text_file,all_pob_text)
