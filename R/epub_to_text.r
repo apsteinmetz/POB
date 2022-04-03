@@ -58,7 +58,7 @@ pob_books <- all_pob_text %>%
   summarise(text = str_c(text,collapse =  " ")) %>%
   mutate(year = lubridate::year(date)) %>%
   mutate(author = "O'Brian") %>%
-  mutate(label = paste(author,title,year,sep = "-")) %>%
+  mutate(label = paste(author,title,year,sep = "_")) %>%
   arrange(year)
 
 save(pob_books,file="data/pob_books.rdata")

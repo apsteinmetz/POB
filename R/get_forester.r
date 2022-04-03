@@ -17,7 +17,7 @@ forester_books <- txt_files %>%
   mutate(text=str_remove_all(text,"\n")) %>%
   mutate(author = "C.S. Forester",.before=text) %>%
   mutate(year = years,.before=text) %>%
-  mutate(label = paste("Forester",title,year,sep = "-"),.before=text) %>%
+  mutate(label = paste("Forester",title,year,sep = "_"),.before=text) %>%
   arrange(year)
 
 

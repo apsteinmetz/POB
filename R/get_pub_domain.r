@@ -13,7 +13,7 @@ austen_books <- janeaustenr::austen_books() %>%
   summarise(text = str_c(text,collapse = " ")) %>%
   mutate(author = "Jane Austen",.before=text) %>%
   mutate(year = years,.before=text) %>%
-  mutate(label = paste("Austen",title,year,sep="-"),.before=text) %>%
+  mutate(label = paste("Austen",title,year,sep="_"),.before=text) %>%
   arrange(year)
 
 save(austen_books,file="./data/austen_books.rdata")
@@ -72,7 +72,7 @@ gutenberg_books <- gutenberg_books %>%
   mutate(label = paste(str_extract(author,".+(?=,)"),
                         title,
                         year,
-                        sep = "-"),
+                        sep = "_"),
          .before=text) %>%
   {.}
 
