@@ -63,7 +63,7 @@ book_year <- c(1847,
                1921,
                1796)
 
-gutenberg_books1 <- gutenberg_books %>%
+gutenberg_books <- gutenberg_books %>%
   group_by(gutenberg_id,title,author) %>%
   summarise(text = str_c(text,collapse =  " ")) %>%
   ungroup %>%
