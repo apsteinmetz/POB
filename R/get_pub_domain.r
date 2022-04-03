@@ -18,7 +18,7 @@ austen_books <- janeaustenr::austen_books() %>%
 
 save(austen_books,file="./data/austen_books.rdata")
 
-# --- gutenberg ---------------------
+# --- Gutenberg ---------------------
 metadata <- gutenberg_metadata
 
 
