@@ -4,11 +4,21 @@ library(tidytext)
 library(janeaustenr)
 library(gutenbergr)
 
-
+# relies on order
+# sense, pride, mansfield, emma, northanger,persuasion
+years = c(1811,1813,1814,1816,1803,1818)
 austen_books <- janeaustenr::austen_books() %>%
   rename(title=book) %>%
-  nest(data=text)
+  group_by(title) %>%
+  summarise(text = str_c(text,collapse = " ")) %>%
+  mutate(author = "Jane Austen",.before=text) %>%
+  mutate(year = years,.before=text) %>%
+  mutate(label = paste("Austen",title,year,sep="-"),.before=text) %>%
+  arrange(year)
 
+save(austen_books,file="./data/austen_books.rdata")
+
+# --- gutenberg ---------------------
 metadata <- gutenberg_metadata
 
 
@@ -35,23 +45,43 @@ book_ids <- c(edgeworth_book_ids,
               heyer_book_ids)
 
 gutenberg_books <- gutenberg_download(book_ids,
-                                     meta_fields = c("title","author")) %>%
-  nest(data=text)
+                                     meta_fields = c("title","author"))
 
 better_titles = c("Jane Eyre",
                   "Captain Blood",
                   "The Sea Hawk",
-                  "Tales of a Fashionable Life",
+                  "Fashionable Life",
                   "Belinda",
                   "The Black Moth",
-                  "camilla")
-gutenberg_books$title <- better_titles
+                  "Camilla")
+
+book_year <- c(1847,
+               1922,
+               1915,
+               1809,
+               1801,
+               1921,
+               1796)
+
+gutenberg_books1 <- gutenberg_books %>%
+  group_by(gutenberg_id,title,author) %>%
+  summarise(text = str_c(text,collapse =  " ")) %>%
+  ungroup %>%
+  mutate(title = better_titles,.before=text) %>%
+  mutate(year = book_year,.before=text) %>%
+  mutate(label = paste(str_extract(author,".+(?=,)"),
+                        title,
+                        year,
+                        sep = "-"),
+         .before=text) %>%
+  {.}
+
 
 save(gutenberg_books,file="./data/gutenberg_books.rdata")
 
 
 # --- Utilities ------------------------------------
-make_plain_text_file <- function(title1,corpus) {
+make_plain_text_file <- function(corpus) {
   print(title1)
   corpus %>%
     filter(title == title1) %>%

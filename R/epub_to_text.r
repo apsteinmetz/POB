@@ -7,9 +7,11 @@ chapter_names <- read_csv(file="../number_names1to50.csv") %>%
   mutate(name = paste("CHAPTER",name)) %>%
   mutate(len = str_length(name))
 
-book_dirs <- dir("./epub")
+# ----------- GET POB -------------------
+book_dir <- "./epub/POB"
+book_dirs <- dir(book_dir)
 
-epub_files <- paste0("./epub/",book_dirs) %>%
+epub_files <- paste(book_dir,book_dirs,sep="/") %>%
   map(list.files,pattern="epub$",full.names = TRUE) %>%
   unlist
 
@@ -51,17 +53,14 @@ all_pob_text <- all_text %>% rename(chapter = section)
 
 save(all_pob_text,file="data/all_pob_text.rdata")
 
-make_plain_text_file <- function(title1,corpus) {
-  print(title1)
-  corpus %>%
-    filter(title == title1) %>%
-    # unnest(cols = data) %>%
-    # append space at end of line
-    mutate(text = paste0(text, " ")) %>%
-    pull(text) %>%
-    str_flatten() %>%
-    write_file(paste0("./txt/", title1, ".txt"))
-}
+pob_books <- all_pob_text %>%
+  group_by(book_num,title,date) %>%
+  summarise(text = str_c(text,collapse =  " ")) %>%
+  mutate(year = lubridate::year(date)) %>%
+  mutate(author = "O'Brian") %>%
+  mutate(label = paste(author,title,year,sep = "-")) %>%
+  arrange(year)
+
+save(pob_books,file="data/pob_books.rdata")
 
 
-all_pob_text$title %>% walk(make_plain_text_file,all_pob_text)
