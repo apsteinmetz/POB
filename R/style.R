@@ -99,15 +99,16 @@ stylo(
 )
 
 stylo(
-  parsed.corpus = token_corpus,
+  #parsed.corpus = token_corpus,
+  corpus.dir = "./stylo/corpus",
   analysis.type = "CA",
   ngram.size = 3,
-  culling.min = 50,
-  cullin.max = 50,
+  culling.min = 60,
+  cullin.max = 60,
   mfw.min = 100,
   mfw.max = 3000,
   custom.graph.title = "O'Brian, Austen & Co.",
-  write.png.file = FALSE,
+  write.jpg.file = TRUE,
   gui = FALSE
 )
 
@@ -135,14 +136,7 @@ freq_table %>%
   filter(phrase == "i assure you") %>%
   ggplot(aes(book,freq)) + geom_col() +
   labs(y = "Relative Use",
-       subtitle = "Who Uses Common Regency Vernacular",
+       subtitle = "Who Uses Common Regency Vernacular?",
        title = '"I Assure You"') +
   coord_flip()
 
-freq_table %>% ggplot(aes(book,`i dare say`))+geom_col() +
-  coord_flip()
-
-freq_table %>% ggplot(aes(book,`if you please`))+geom_col() +
-  coord_flip()
-freq_table %>% ggplot(aes(book,`not a moment`))+geom_col() +
-  coord_flip()

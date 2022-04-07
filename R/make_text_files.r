@@ -10,8 +10,15 @@ all_books <- pob_books[1:6,] %>%
   full_join(forester_books) %>%
   full_join(gutenberg_books)
 
-all_books$label %>%
-  paste0("./stylo/corpus/",.,".txt")
+for (n in 1:nrow(all_books)){
+  print(paste0("./stylo/corpus/",all_books$label[n],".txt"))
+  write_file(all_books$text[n],
+             file = paste0("./stylo/corpus/",all_books$label[n],".txt"))
+
+}
 
 
-  walk(write_file)
+
+
+write_file(all_books$text[n],
+           file = "./stylo/corpus/temp.txt")
