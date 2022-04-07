@@ -18,4 +18,8 @@ birds <- birds_raw %>%  html_element(css = "#main-content > div > div > div.word
   enframe(name=NULL,value="animal") %>%
   filter(!(animal %in% LETTERS))
 
+animals <- bind_rows(animals,birds)
+
+save(animals,file = "./data/animals.rdata")
+
 
