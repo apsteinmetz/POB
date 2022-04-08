@@ -40,56 +40,30 @@ animals <- animals %>%
 
 animals <- enframe(added_animals,name=NULL,value="animal") %>%
   bind_rows(animals) %>%
-  mutate(animal = if_else(animal %in% make_singular,
-                          str_remove(animal,"s$"),
-                          animal))
+  mutate(animal = singularize(animal))
 
-# singular animal
-pob_animal <- animals %>%
-  rename(word = animal) %>%
+# by books
+pob_animals_by_book <-
+  animals %>%
+  mutate(plural = pluralize(animal)) %>%
+  pivot_longer(cols = c(animal,plural)) %>%
+  select(value) %>%
+  # eliminate double counting where plural = singular word, e.g. "sheep"
+  unique() %>%
+  rename(word=value) %>%
   inner_join(tkns,by="word") %>%
-  count(word)
-
-#pluralize
-consonants <- letters[!(letters %in% c("a","e","i","o","u","y"))] %>%
-  paste(collapse = "")
-
-y_regex <- paste0("[",consonants,"]y$")
-
-animals <- animals %>%
-  mutate(plural = animal) %>%
-  mutate(plural = if_else(str_detect(plural,"s$"),
-                           paste0(plural,"es"),
-                           paste0(plural,"s"))) %>%
-  mutate(plural = if_else(str_detect(animal,y_regex),
-                          str_replace(animal,"y$","ies"),
-                          plural)) %>%
-
-  {.}
-animals %>% filter(str_detect(animal,y_regex))
-
-# what words will be misspelled after removing "s"
-odd_plurals <- pob_animal %>% filter(str_detect(word,"s$|y$")) %>%
-  mutate(word = paste0(word,"e")) %>%
-  mutate(word = str_replace(word,"ye$","ie")) %>%
-  pull(word)
-
-
-pob_animals <- animals %>%
-  rename(word = plural) %>%
-  inner_join(tkns,by="word") %>%
+  group_by(title) %>%
   count(word) %>%
   # revert plurals to singular
-  mutate(word = str_remove(word,"s$")) %>%
-  mutate(word = if_else(word %in% odd_plurals,
-                         str_remove(word,"e$"),
-                         word)) %>%
-  mutate(word = str_replace(word,"i$","y")) %>%
-  # combine with original singular
-  bind_rows(pob_animal) %>%
+  mutate(word = singularize(word)) %>%
+  group_by(title,word) %>%
+  tally(n) %>%
+  {.}
+
+# overall
+pob_animals <- pob_animals_by_book %>%
   group_by(word) %>%
   tally(n)
-
 
 if(require(RColorBrewer)){
 
@@ -98,27 +72,4 @@ if(require(RColorBrewer)){
 }
 
 wordcloud(pob_animals$word,freq = pob_animals$n,colors = pal)
-
-# how do rankings change when we include plurals?
-ranks <- pob_animal %>% rename(singular = n) %>%
-  full_join(pob_animals) %>%
-  rename(plural = n) %>%
-  mutate(across(.fns= ~replace(., is.na(.), 0))) %>%
-  mutate(rank_s = rank(singular)) %>%
-  mutate(rank_p = rank(plural)) %>%
-  mutate(rank_diff= rank_s-rank_p)
-
-
-
-
-# by books
-pob_animals_by_book <- tkns %>%
-  rename(animal =  word) %>%
-  group_by(title) %>%
-  inner_join(animals,by="animal") %>%
-  count(animal) %>%
-  pivot_wider(id_cols = animal,values_from = n,names_from = title) %>%
-  mutate(across(.fns= ~replace(., is.na(.), 0)))
-
-
 
