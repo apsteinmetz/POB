@@ -23,9 +23,16 @@ books  <- epub_files %>%
   arrange(date) %>%
   rownames_to_column(var="book_num")
 
-all_text <- unnest(books,text,names_sep = ) %>%
+all_text <- unnest(books,text) %>%
   filter(str_detect(text,"(^CHAPTER)|(^Chapter)")) %>%
   mutate(across(.fns = unname))
+
+# fix periods and colons without space
+# will create two spaces in some places, OK, Boomer?
+all_text <- all_text %>%
+  mutate(text = str_replace_all(text,"\\.|:",". "))
+
+
 
 get_chapter_name <- function(chapter) {
   for (cn in nrow(chapter_names):1) {
