@@ -21,7 +21,8 @@ books  <- epub_files %>%
   select(title,date,data) %>%
   transmute(title,date = as.Date(substr(date,1,10)),text=data) %>%
   arrange(date) %>%
-  rownames_to_column(var="book_num")
+  rownames_to_column(var="book_num") %>%
+  mutate(title = as_factor(title))
 
 all_text <- unnest(books,text) %>%
   filter(str_detect(text,"(^CHAPTER)|(^Chapter)")) %>%
