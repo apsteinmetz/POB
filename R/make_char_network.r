@@ -1,16 +1,14 @@
 # calc character network
 library(tidyverse)
 library(tidytext)
-
-# if any two characters names appear within this proximity,
-# they are deemed to be associated
-WORD_PROXIMITY = 200
-
+library(forcats)
+library(igraph)
+library(rgexf)
 
 load(file="./data/pob_names.rdata")
 load("./data/pob_books.rdata")
 
-
+# ------------------------------------------------------
 # look at term frequency
 # see: https://www.tidytextmining.com/tfidf.html
 
@@ -53,7 +51,6 @@ book_tf_idf %>%
   select(-total) %>%
   arrange(desc(tf_idf))
 
-library(forcats)
 
 book_tf_idf %>%
   group_by(title) %>%
@@ -64,28 +61,65 @@ book_tf_idf %>%
   facet_wrap(~title, ncol = 2, scales = "free") +
   labs(x = "tf-idf", y = NULL)
 
-temp <- book_tf_idf %>%
-  group_by(title) %>%
-  slice_max(tf_idf, n = 5) %>%
-  select(title,word)
+
+# ------------------------------------------------------
+# CHARACTER NETWORK
+# proximity measure of character mentions
+pob_sheet <- gs4_get("https://docs.google.com/spreadsheets/d/1P4GBk-xfCpHVOgh-DhiQDFNYAzNx4sENpbTR3HDmejY/edit#gid=68927014")
+pob_names <- read_sheet(pob_sheet)
+save(pob_names,file="./data/pob_names.rdata")
+
+
+load(file="./data/pob_names.rdata")
+load("./data/pob_books.rdata")
+
 
 # change instances of first and last names to just first
 # where the is ambiguity with a family member
 pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"Molly Harte","Molly")) %>%
-  mutate(text = str_replace_all(text,"Mrs. Oakes","Clarissa")) %>%
+  mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
+  mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
   mutate(text = str_replace_all(text,"Queeney","Queenie")) %>%
   mutate(text = str_replace_all(text,"Clarissa Oakes","Clarissa"))
+
+# enforce some two-word names
+pob_books <- pob_books %>%
+  mutate(text = str_replace_all(text,"General Aubrey","General_Aubrey")) %>%
+  mutate(text = str_replace_all(text,"Philip Aubrey","Philip_Aubrey")) %>%
+  mutate(text = str_replace_all(text,"King George","King_George")) %>%
+  mutate(text = str_replace_all(text,"Lady Keith","Lady_Keith")) %>%
+  mutate(text = str_replace_all(text,"Miss Smith","Miss_Smith")) %>%
+  mutate(text = str_replace_all(text,"Amanda Smith","Miss_Smith")) %>%
+  mutate(text = str_replace_all(text,"Christine Wood","Christine_Wood")) %>%
+  mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Fielding","Mrs_Fielding")) %>%
+  mutate(text = str_replace_all(text,"Laura Fielding","Mrs_Fielding")) %>%
+  mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Williams","Mrs_Williams")) %>%
+  mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Broad","Mrs_Broad"))
 
 # where characters are alternately refered to by first or last
 # choose one
 pob_books <- pob_books %>%
+  mutate(text = str_replace_all(text,"Heneage Dundas","Dundas")) %>%
   mutate(text = str_replace_all(text,"Heneage","Dundas")) %>%
+  mutate(text = str_replace_all(text,"Stephen Maturin","Stephen")) %>%
   mutate(text = str_replace_all(text,"Maturin","Stephen")) %>%
-  mutate(text = str_replace_all(text,"Aubrey","Jack"))
+  mutate(text = str_replace_all(text,"Diana Villiers","Diana")) %>%
+  mutate(text = str_replace_all(text,"Villiers","Diana")) %>%
+  mutate(text = str_replace_all(text,"Jack Aubrey","Jack")) %>%
+  mutate(text = str_replace_all(text,"Aubrey","Jack")) %>%
+  mutate(text = str_replace_all(text,"General_Jack","General_Aubrey")) %>%
+  # avoid lower case "jack"
+  mutate(text = str_replace_all(text,"jack","mast_jack"))
+
+#get rid of sophie in the first book since it refers to the ship
+pob_books <- pob_books %>%
+  mutate(text = if_else(title == "Master and Commander",
+                        str_replace_all(text,"Sophie","hms_sophie"),text))
 
 
-# proximity measure of character mentions
+
+
 book_words <- pob_books %>%
   group_by(title) %>%
   unnest_tokens(word,text) %>%
@@ -94,13 +128,15 @@ book_words <- pob_books %>%
   rownames_to_column("position") %>%
   mutate(position = as.numeric(position))
 
-#get rid of sophie in the first book since it refers to the ship
-book_words <- book_words %>%
-  mutate(word = if_else(word =="sophie" & title == "Master and Commander",
-                        "hms_sophie",word))
-
 character_mentions <- book_words %>%
-  filter(word %in% tolower(as.vector(pob_names$id)))
+  filter(word %in% tolower(as.vector(pob_names$id))) %>%
+  mutate(word = str_to_title(word))
+
+characters <- character_mentions %>%
+  group_by(word) %>%
+  count(word,name="mentions") %>%
+  rename(person = word)
+
 
 character_proximity <- character_mentions %>%
   mutate(person2 = lag(word),pos_2=lag(position)) %>%
@@ -109,30 +145,82 @@ character_proximity <- character_mentions %>%
   filter(!(person1 == person2)) %>%
   na.omit()
 
-# character_summary <- character_proximity %>%
-#   group_by(title,person1,person2) %>%
-#   summarise(n = n(),avg_dist = mean(distance)) %>%
-#   ungroup() %>%
-#   # group_by(title) %>%
-#   arrange(n)
 
 character_summary <- character_proximity %>%
   group_by(person1,person2) %>%
-  summarise(n = n(),avg_dist = mean(distance),.groups="drop") %>%
+  summarise(interactions = n(),avg_dist = mean(distance),.groups="drop") %>%
   ungroup() %>%
   # group_by(title) %>%
-  arrange(desc(n))
+  arrange(desc(interactions))
 
 # combine reciprocal pairs
-character_summary <- character_summary %>%
+relations_agg <- character_summary %>%
+  ungroup() %>%
+  select(person1, person2, avg_dist, interactions) %>%
   rowwise() %>%
-  mutate(person12 = list(sort(c(person1,person2)))) %>%
+  mutate(person12 = list(sort(c(person1, person2)))) %>%
   mutate(person1 = person12[1]) %>%
   mutate(person2 = person12[2]) %>%
   select(-person12) %>%
-  group_by(person1,person2) %>%
-  summarise(n = sum(n),avg_dist=mean(avg_dist),.groups = "drop")
+  group_by(person1, person2) %>%
+  summarise(
+    interactions = sum(interactions),
+    log_interactions = log(sum(interactions)),
+    avg_dist = mean(avg_dist),
+    .groups = "drop"
+  ) %>%
+  {.}
+
+# combine reciprocal pairs
+relations <- character_proximity %>%
+  ungroup() %>%
+  select(person1, person2, distance) %>%
+  group_by(person1, person2) %>%
+  summarise(
+    avg_dist = mean(distance),
+    .groups = "drop"
+  ) %>%
+  {.}
 
 
+# #fix problems
+# temp <- relations %>%
+#   pivot_longer(cols=c(person1,person2)) %>%
+#   select(value) %>%
+#   rename(person=value) %>%
+#   unique() %>%
+#   full_join(characters)
 
+# prune network to top percent
+relations_subset <- relations_agg %>%
+  slice_max(interactions,prop=0.25)
+
+characters_subset <- relations_subset %>%
+  pivot_longer(c(person1,person2),values_to = "person") %>%
+  select(person) %>%
+  unique %>%
+  left_join(characters)
+
+g <- graph_from_data_frame(relations_subset,
+                           vertices = characters_subset,
+                           directed=FALSE)
+print(g, e=TRUE, v=TRUE)
+plot(g)
+
+
+wc <- cluster_walktrap(g)
+modularity(wc)
+membership(wc)
+plot(wc, g)
+
+gexg <- rgexf::igraph.to.gexf(g)
+
+plot(gexg)
+
+df0 %>%
+  rowwise() %>%
+  mutate(n12 = list(sort(c(n1, n2)))) %>%
+  mutate(n1 = n12[1]) %>%
+  mutate(n2 = n12[2]) %>%
+  select(-person12)
 
