@@ -80,6 +80,7 @@ pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"Molly Harte","Molly")) %>%
   mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
   mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
+<<<<<<< HEAD
   mutate(text = str_replace_all(text,"Lady Keith","Queenie")) %>%
   mutate(text = str_replace_all(text,"Clarissa Oakes","Clarissa"))
 
@@ -89,11 +90,20 @@ pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"Davis","Davies"))
 
 
+=======
+  mutate(text = str_replace_all(text,"Queeney","Queenie")) %>%
+  mutate(text = str_replace_all(text,"Clarissa Oakes","Clarissa"))
+
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
 # enforce some two-word names
 pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"General Aubrey","General_Aubrey")) %>%
   mutate(text = str_replace_all(text,"Philip Aubrey","Philip_Aubrey")) %>%
+<<<<<<< HEAD
   mutate(text = str_replace_all(text,"King George","King_George")) %>%
+=======
+  mutate(text = str_replace_all(text,"Lady Keith","Lady_Keith")) %>%
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
   mutate(text = str_replace_all(text,"Miss Smith","Miss_Smith")) %>%
   mutate(text = str_replace_all(text,"Amanda Smith","Miss_Smith")) %>%
   mutate(text = str_replace_all(text,"Christine Wood","Christine_Wood")) %>%
@@ -109,7 +119,11 @@ pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"Heneage","Dundas")) %>%
   mutate(text = str_replace_all(text,"Stephen Maturin","Stephen")) %>%
   mutate(text = str_replace_all(text,"Maturin","Stephen")) %>%
+<<<<<<< HEAD
   mutate(text = str_replace_all(text,"Diana Villiers","Diana")) %>%
+=======
+  mutate(text = str_replace_all(text,"Diana Villers","Diana")) %>%
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
   mutate(text = str_replace_all(text,"Villiers","Diana")) %>%
   mutate(text = str_replace_all(text,"Jack Aubrey","Jack")) %>%
   mutate(text = str_replace_all(text,"Aubrey","Jack")) %>%
@@ -142,7 +156,10 @@ characters <- character_mentions %>%
   count(word,name="mentions") %>%
   rename(person = word)
 
+<<<<<<< HEAD
 PROXIMITY_LIMIT = 200
+=======
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
 
 character_proximity <- character_mentions %>%
   mutate(person2 = lag(word),pos_2=lag(position)) %>%
@@ -178,6 +195,7 @@ relations_agg <- character_summary %>%
   ) %>%
   {.}
 
+<<<<<<< HEAD
 
 # graph from complete interactions
 relations <- character_summary %>%
@@ -200,10 +218,46 @@ plot(wc, g)
 gexg <- rgexf::igraph.to.gexf(g)
 
 plot(gexg)
+=======
+# combine reciprocal pairs
+relations <- character_proximity %>%
+  ungroup() %>%
+  select(person1, person2, distance) %>%
+  group_by(person1, person2) %>%
+  summarise(
+    avg_dist = mean(distance),
+    .groups = "drop"
+  ) %>%
+  {.}
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
 
 
+# #fix problems
+# temp <- relations %>%
+#   pivot_longer(cols=c(person1,person2)) %>%
+#   select(value) %>%
+#   rename(person=value) %>%
+#   unique() %>%
+#   full_join(characters)
+
+# prune network to top percent
+relations_subset <- relations_agg %>%
+  slice_max(interactions,prop=0.25)
+
+characters_subset <- relations_subset %>%
+  pivot_longer(c(person1,person2),values_to = "person") %>%
+  select(person) %>%
+  unique %>%
+  left_join(characters)
+
+g <- graph_from_data_frame(relations_subset,
+                           vertices = characters_subset,
+                           directed=FALSE)
+print(g, e=TRUE, v=TRUE)
+plot(g)
 
 
+<<<<<<< HEAD
 # combine reciprocal pairs
 relations <- character_proximity %>%
   ungroup() %>%
@@ -233,6 +287,8 @@ print(g, e=TRUE, v=TRUE)
 plot(g)
 
 
+=======
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
 wc <- cluster_walktrap(g)
 modularity(wc)
 membership(wc)
@@ -242,6 +298,7 @@ gexg <- rgexf::igraph.to.gexf(g)
 
 plot(gexg)
 
+<<<<<<< HEAD
 # create edges and nodes spreadsheet for gephi import
 relations_subset %>%
   rename(Source=person1,Target=person2) %>%
@@ -252,3 +309,5 @@ characters_subset %>%
   rename(id=person) %>%
   mutate(label = id,.after = id) %>%
   write_csv(file="./data/nodes_summary.csv")
+=======
+>>>>>>> 4543f0d896dec2887d6f4ac609343a65ad7bca58
