@@ -80,15 +80,20 @@ pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"Molly Harte","Molly")) %>%
   mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
   mutate(text = str_replace_all(text,"Mrs(\\.)?( )+Oakes","Clarissa")) %>%
-  mutate(text = str_replace_all(text,"Queeney","Queenie")) %>%
+  mutate(text = str_replace_all(text,"Lady Keith","Queenie")) %>%
   mutate(text = str_replace_all(text,"Clarissa Oakes","Clarissa"))
+
+# normalize spelling where POB alters it across volumes
+pob_books <- pob_books %>%
+  mutate(text = str_replace_all(text,"Queeney","Queenie")) %>%
+  mutate(text = str_replace_all(text,"Davis","Davies"))
+
 
 # enforce some two-word names
 pob_books <- pob_books %>%
   mutate(text = str_replace_all(text,"General Aubrey","General_Aubrey")) %>%
   mutate(text = str_replace_all(text,"Philip Aubrey","Philip_Aubrey")) %>%
   mutate(text = str_replace_all(text,"King George","King_George")) %>%
-  mutate(text = str_replace_all(text,"Lady Keith","Lady_Keith")) %>%
   mutate(text = str_replace_all(text,"Miss Smith","Miss_Smith")) %>%
   mutate(text = str_replace_all(text,"Amanda Smith","Miss_Smith")) %>%
   mutate(text = str_replace_all(text,"Christine Wood","Christine_Wood")) %>%
@@ -137,10 +142,12 @@ characters <- character_mentions %>%
   count(word,name="mentions") %>%
   rename(person = word)
 
+PROXIMITY_LIMIT = 200
 
 character_proximity <- character_mentions %>%
   mutate(person2 = lag(word),pos_2=lag(position)) %>%
   mutate(distance = position - lag(pos_2)) %>%
+  filter(distance < PROXIMITY_LIMIT) %>%
   rename(person1 = word) %>%
   filter(!(person1 == person2)) %>%
   na.omit()
@@ -171,6 +178,32 @@ relations_agg <- character_summary %>%
   ) %>%
   {.}
 
+
+# graph from complete interactions
+relations <- character_summary %>%
+  ungroup() %>%
+  select(person1, person2, interactions, avg_dist)
+
+
+g <- graph_from_data_frame(relations_agg,
+                           vertices = characters,
+                           directed=FALSE)
+print(g, e=TRUE, v=TRUE)
+plot(g)
+
+
+wc <- cluster_walktrap(g)
+modularity(wc)
+membership(wc)
+plot(wc, g)
+
+gexg <- rgexf::igraph.to.gexf(g)
+
+plot(gexg)
+
+
+
+
 # combine reciprocal pairs
 relations <- character_proximity %>%
   ungroup() %>%
@@ -182,14 +215,6 @@ relations <- character_proximity %>%
   ) %>%
   {.}
 
-
-# #fix problems
-# temp <- relations %>%
-#   pivot_longer(cols=c(person1,person2)) %>%
-#   select(value) %>%
-#   rename(person=value) %>%
-#   unique() %>%
-#   full_join(characters)
 
 # prune network to top percent
 relations_subset <- relations_agg %>%
@@ -217,10 +242,13 @@ gexg <- rgexf::igraph.to.gexf(g)
 
 plot(gexg)
 
-df0 %>%
-  rowwise() %>%
-  mutate(n12 = list(sort(c(n1, n2)))) %>%
-  mutate(n1 = n12[1]) %>%
-  mutate(n2 = n12[2]) %>%
-  select(-person12)
+# create edges and nodes spreadsheet for gephi import
+relations_subset %>%
+  rename(Source=person1,Target=person2) %>%
+  mutate(Type = "Undirected",Weight=interactions,.after = Target) %>%
+  write_csv(file="./data/edges_summary.csv")
 
+characters_subset %>%
+  rename(id=person) %>%
+  mutate(label = id,.after = id) %>%
+  write_csv(file="./data/nodes_summary.csv")
