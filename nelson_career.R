@@ -91,13 +91,22 @@ p <- nelson %>%
            col.end = "end_date",
            optimize_y = FALSE,
            linewidth = 6) +
+  geom_vline(xintercept = as.numeric(as.POSIXct("1794-07-12")), color = "red", size = .5) +
+  annotate("text",label="Loses Eye",
+           x = as.POSIXct("1792-07-12"), y= 36) +
+  geom_vline(xintercept = as.numeric(as.POSIXct("1797-07-22")), color = "red", size = .5) +
+  annotate("text",label="Loses Arm",
+           x = as.POSIXct("1795-07-12"), y= 35) +
+  geom_vline(xintercept = as.numeric(as.POSIXct("1805-10-21")), color = "red", size = .5) +
+  annotate("text",label="Loses Life",
+           x = as.POSIXct("1803-07-12"), y= 36) +
   theme(legend.position = "none") +
   theme(axis.text = element_text(family = "Libre Caslon Text",size = 15)) +
   theme(title = element_text(family = "Libre Caslon Text",size = 20)) +
   #  theme(axis.line = element_line(color = "black")) +
 #  theme(panel.grid = element_line(linetype = "blank")) +
 #  theme(plot.background = element_rect(fill="lightblue")) +
-#  theme(panel.background = element_rect(fill="lightblue")) +
+  theme(panel.background = element_rect(fill="lightgrey")) +
   labs(title = '"Pass the Salt"',
        subtitle = "A Selected Timeline of Admiral Nelson's Career",
        caption = "Viz: Art Steinmetz using R,ggplot2 and vistime")
