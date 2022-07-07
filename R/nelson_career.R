@@ -7,11 +7,11 @@ library(sysfonts)
 library(showtext)
 
 
-#sysfonts::font_add_google("Libre Caslon Text")
+sysfonts::font_add_google("Libre Caslon Text")
 showtext::showtext_auto()
 
 nelson_raw <- tribble(
-  ~"Rank", ~"Days", ~"color",
+  ~"Group", ~"Label", ~"color",
   "Midshipman",2178, "tan",
   "Lieutenant",619, "darkgrey",
   "Commander",193, "tomato",
@@ -21,29 +21,29 @@ nelson_raw <- tribble(
   "Vice Admiral, Blue",1208, "royalblue",
   "Vice Admiral, White",546,"white",
 ) %>%
-  mutate(Rank = as_factor(Rank))
+  mutate(Group = as_factor(Group))
 
 
 trafalgar_date <- as.Date("1805-10-21")
 nelson <- nelson_raw %>%
-  mutate(end = cumsum(Days)) %>%
-  mutate(start = end - Days,.before = "end") %>%
+  mutate(end = cumsum(Label)) %>%
+  mutate(start = end - Label,.before = "end") %>%
   mutate(end_date = trafalgar_date - max(end) + end) %>%
-  mutate(start_date = end_date - Days,.before = "end") %>%
+  mutate(start_date = end_date - Label,.before = "end") %>%
   select(-start,-end) %>%
-  mutate(Days = as.character(Days))
+  mutate(Label = as.character(Label))
 
-nelson$Days[4] <- paste(nelson$Days[4],"Days")
+nelson$Label[4] <- paste(nelson$Label[4],"Label")
 
 nelson_cols = nelson$color
-names(nelson_cols) <- nelson$Rank
+names(nelson_cols) <- nelson$Group
 
 nelson <-
  nelson %>% arrange(desc(end_date))
 
 # add events
 events <- tribble(
-  ~"Rank", ~"Days", ~"color",~"start_date",~"end_date",
+  ~"Group", ~"Label", ~"color",~"start_date",~"end_date",
   "Battle","Corsica","red",as.Date("1794-07-12"),as.Date("1794-07-12"),
   "Battle","Genoa","red",as.Date("1795-04-14"),as.Date("1795-04-14"),
   "Battle","St. Vincent","red",as.Date("1797-02-14"),as.Date("1797-02-14"),
@@ -66,7 +66,7 @@ events <- tribble(
 
 # add locations
 locations <- tribble(
-  ~"Rank", ~"Days", ~"color",~"start_date",~"end_date",
+  ~"Group", ~"Label", ~"color",~"start_date",~"end_date",
   "Theatre", "W. Indies","yellow",as.Date("1771-01-15"),NA,
   "Theatre", "Arctic","blue",as.Date("1773-01-15"),NA,
   "Theatre", "E. Indies","tan",as.Date("1773-10-15"),NA,
@@ -92,11 +92,11 @@ nelson <- bind_rows(nelson,events) %>%
   bind_rows(locations)
 
 # nelson %>%
-#   ggplot(aes(Rank,end,fill=Rank))+ geom_col() +
+#   ggplot(aes(Group,end,fill=Group))+ geom_col() +
 #   scale_fill_manual(values = nelson_cols) +
 #   scale_y_continuous(sec_axis = sec_axis(~. + 100,name="Date")) +
-#   geom_col(aes(Rank,start),fill="lightblue") +
-#   geom_text(aes(label = Days),nudge_y= .2) +
+#   geom_col(aes(Group,start),fill="lightblue") +
+#   geom_text(aes(label = Label),nudge_y= .2) +
 #   theme_minimal() +
 #   theme(legend.position = "none") +
 #   theme(panel.grid = element_line(linetype = "blank")) +
@@ -105,8 +105,8 @@ nelson <- bind_rows(nelson,events) %>%
 
 
 p <- nelson %>%
-  gg_vistime(col.group = "Rank",
-             col.event = "Days",
+  gg_vistime(col.group = "Group",
+             col.event = "Label",
            col.start = "start_date",
            col.end = "end_date",
            optimize_y = FALSE,
@@ -120,6 +120,8 @@ p <- nelson %>%
   geom_vline(xintercept = as.numeric(as.POSIXct("1805-10-21")), color = "red", size = .5) +
   annotate("text",label="Loses Life",
            x = as.POSIXct("1803-07-12"), y= 36) +
+  annotate("text",label="Only Major Locations Shown",
+           x = as.POSIXct("1780-07-12"), y= 2) +
   theme(legend.position = "none") +
   theme(axis.text = element_text(family = "Libre Caslon Text",size = 15)) +
   theme(title = element_text(family = "Libre Caslon Text",size = 20)) +
