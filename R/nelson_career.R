@@ -113,13 +113,13 @@ p <- nelson %>%
            linewidth = 6) +
   geom_vline(xintercept = as.numeric(as.POSIXct("1794-07-12")), color = "red", size = .5) +
   annotate("text",label="Loses Eye",
-           x = as.POSIXct("1792-07-12"), y= 36) +
+           x = as.POSIXct("1792-07-12"), y= 53) +
   geom_vline(xintercept = as.numeric(as.POSIXct("1797-07-22")), color = "red", size = .5) +
   annotate("text",label="Loses Arm",
-           x = as.POSIXct("1795-07-12"), y= 35) +
+           x = as.POSIXct("1795-07-12"), y= 50) +
   geom_vline(xintercept = as.numeric(as.POSIXct("1805-10-21")), color = "red", size = .5) +
   annotate("text",label="Loses Life",
-           x = as.POSIXct("1803-07-12"), y= 36) +
+           x = as.POSIXct("1803-07-12"), y= 54) +
   annotate("text",label="Only Major Locations Shown",
            x = as.POSIXct("1780-07-12"), y= 2) +
   theme(legend.position = "none") +
