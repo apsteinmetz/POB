@@ -62,14 +62,34 @@ events <- tribble(
   "Command", "Vanguard","green",as.Date("1798-03-28"),as.Date("1798-03-28"),
   "Command", "Elephant","green",as.Date("1801-04-02"),as.Date("1801-04-02"),
   "Command", "Victory","green",as.Date("1803-07-02"),as.Date("1803-07-02"),
-  #  "Theatre", "Atlantic","darkgreen",as.Date("1771-01-15"),as.Date("1773-01-15"),
-#  "Theatre", "Arctic","darkgreen",as.Date("1773-01-15"),as.Date("1773-12-15"),
-#  "Theatre", "West Indies","darkgreen",as.Date("1773-01-15"),as.Date("1776-01-15"),
-#  "Theatre", "East Indies","darkgreen",as.Date("1779-01-15"),as.Date("1780-01-15")
-
 )
 
-nelson <- bind_rows(nelson,events)
+# add locations
+locations <- tribble(
+  ~"Rank", ~"Days", ~"color",~"start_date",~"end_date",
+  "Theatre", "W. Indies","yellow",as.Date("1771-01-15"),NA,
+  "Theatre", "Arctic","blue",as.Date("1773-01-15"),NA,
+  "Theatre", "E. Indies","tan",as.Date("1773-10-15"),NA,
+  "Theatre", "England","lightgreen",as.Date("1775-01-15"),NA,
+  "Theatre", "W. Indies","yellow",as.Date("1777-01-15"),NA,
+  "Theatre", "N. America","darkgreen",as.Date("1782-01-15"),NA,
+  "Theatre", "England","lightgreen",as.Date("1783-01-15"),NA,
+  "Theatre", "W. Indies","yellow",as.Date("1784-01-15"),NA,
+  "Theatre", "England","lightgreen",as.Date("1787-01-15"),NA,
+  "Theatre", "Med.","lightblue",as.Date("1793-1-15"),NA,
+  "Theatre", "Africa","brown",as.Date("1797-1-15"),NA,
+  "Theatre", "Med.","lightblue",as.Date("1798-1-15"),NA,
+  "Theatre", "England","lightgreen",as.Date("1800-01-15"),NA,
+  "Theatre", "Baltic","red",as.Date("1801-01-15"),NA,
+  "Theatre", "England","lightgreen",as.Date("1802-01-15"),NA,
+  "Theatre", "Med.","lightblue",as.Date("1803-1-15"),as.Date("1805-10-15")
+)
+
+locations <- locations %>% mutate(end_date = lead(start_date))
+locations$end_date[nrow(locations)] <- trafalgar_date
+
+nelson <- bind_rows(nelson,events) %>%
+  bind_rows(locations)
 
 # nelson %>%
 #   ggplot(aes(Rank,end,fill=Rank))+ geom_col() +
