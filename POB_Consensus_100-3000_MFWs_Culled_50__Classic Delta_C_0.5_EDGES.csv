@@ -1,0 +1,151 @@
+Source,Target,Weight,Type
+O'Brian_Master and Commander_1970,O'Brian_Post Captain_1972,147,undirected
+O'Brian_Master and Commander_1970,O'Brian_H.M.S. Surprise_1973,120,undirected
+O'Brian_Master and Commander_1970,O'Brian_The Mauritius Command_1977,28,undirected
+O'Brian_Master and Commander_1970,O'Brian_The Fortune of War_1979,8,undirected
+O'Brian_Post Captain_1972,O'Brian_Master and Commander_1970,147,undirected
+O'Brian_Post Captain_1972,O'Brian_H.M.S. Surprise_1973,180,undirected
+O'Brian_Post Captain_1972,O'Brian_The Mauritius Command_1977,1,undirected
+O'Brian_Post Captain_1972,O'Brian_Desolation Island_1977,1,undirected
+O'Brian_Post Captain_1972,O'Brian_The Fortune of War_1979,52,undirected
+O'Brian_Post Captain_1972,Brontë_Jane Eyre_1847,18,undirected
+O'Brian_Post Captain_1972,Heyer_The Black Moth_1921,56,undirected
+O'Brian_H.M.S. Surprise_1973,O'Brian_Master and Commander_1970,120,undirected
+O'Brian_H.M.S. Surprise_1973,O'Brian_Post Captain_1972,180,undirected
+O'Brian_H.M.S. Surprise_1973,O'Brian_The Mauritius Command_1977,32,undirected
+O'Brian_H.M.S. Surprise_1973,O'Brian_Desolation Island_1977,60,undirected
+O'Brian_H.M.S. Surprise_1973,O'Brian_The Fortune of War_1979,12,undirected
+O'Brian_H.M.S. Surprise_1973,Brontë_Jane Eyre_1847,5,undirected
+O'Brian_H.M.S. Surprise_1973,Sabatini_The Sea Hawk_1915,1,undirected
+O'Brian_H.M.S. Surprise_1973,Heyer_The Black Moth_1921,4,undirected
+O'Brian_The Mauritius Command_1977,O'Brian_Master and Commander_1970,28,undirected
+O'Brian_The Mauritius Command_1977,O'Brian_Post Captain_1972,1,undirected
+O'Brian_The Mauritius Command_1977,O'Brian_H.M.S. Surprise_1973,32,undirected
+O'Brian_The Mauritius Command_1977,O'Brian_Desolation Island_1977,147,undirected
+O'Brian_The Mauritius Command_1977,O'Brian_The Fortune of War_1979,113,undirected
+O'Brian_The Mauritius Command_1977,Sabatini_Captain Blood_1922,37,undirected
+O'Brian_The Mauritius Command_1977,Sabatini_The Sea Hawk_1915,4,undirected
+O'Brian_Desolation Island_1977,O'Brian_Post Captain_1972,1,undirected
+O'Brian_Desolation Island_1977,O'Brian_H.M.S. Surprise_1973,60,undirected
+O'Brian_Desolation Island_1977,O'Brian_The Mauritius Command_1977,147,undirected
+O'Brian_Desolation Island_1977,O'Brian_The Fortune of War_1979,179,undirected
+O'Brian_Desolation Island_1977,Brontë_Jane Eyre_1847,28,undirected
+O'Brian_Desolation Island_1977,Sabatini_The Sea Hawk_1915,2,undirected
+O'Brian_The Fortune of War_1979,O'Brian_Master and Commander_1970,8,undirected
+O'Brian_The Fortune of War_1979,O'Brian_Post Captain_1972,52,undirected
+O'Brian_The Fortune of War_1979,O'Brian_H.M.S. Surprise_1973,12,undirected
+O'Brian_The Fortune of War_1979,O'Brian_The Mauritius Command_1977,113,undirected
+O'Brian_The Fortune of War_1979,O'Brian_Desolation Island_1977,179,undirected
+O'Brian_The Fortune of War_1979,Brontë_Jane Eyre_1847,13,undirected
+O'Brian_The Fortune of War_1979,Sabatini_Captain Blood_1922,8,undirected
+O'Brian_The Fortune of War_1979,Sabatini_The Sea Hawk_1915,1,undirected
+Austen_Northanger Abbey_1803,Austen_Sense & Sensibility_1811,104,undirected
+Austen_Northanger Abbey_1803,Austen_Pride & Prejudice_1813,40,undirected
+Austen_Northanger Abbey_1803,Austen_Mansfield Park_1814,78,undirected
+Austen_Northanger Abbey_1803,Austen_Emma_1816,5,undirected
+Austen_Northanger Abbey_1803,Austen_Persuasion_1818,6,undirected
+Austen_Sense & Sensibility_1811,Austen_Northanger Abbey_1803,104,undirected
+Austen_Sense & Sensibility_1811,Austen_Pride & Prejudice_1813,178,undirected
+Austen_Sense & Sensibility_1811,Austen_Mansfield Park_1814,55,undirected
+Austen_Sense & Sensibility_1811,Austen_Emma_1816,11,undirected
+Austen_Sense & Sensibility_1811,Austen_Persuasion_1818,11,undirected
+Austen_Sense & Sensibility_1811,Edgeworth_Fashionable Life_1809,14,undirected
+Austen_Sense & Sensibility_1811,Burney_Camilla_1796,29,undirected
+Austen_Pride & Prejudice_1813,Austen_Northanger Abbey_1803,40,undirected
+Austen_Pride & Prejudice_1813,Austen_Sense & Sensibility_1811,178,undirected
+Austen_Pride & Prejudice_1813,Austen_Mansfield Park_1814,72,undirected
+Austen_Pride & Prejudice_1813,Austen_Emma_1816,66,undirected
+Austen_Pride & Prejudice_1813,Austen_Persuasion_1818,17,undirected
+Austen_Pride & Prejudice_1813,Edgeworth_Fashionable Life_1809,31,undirected
+Austen_Pride & Prejudice_1813,Edgeworth_Belinda_1801,13,undirected
+Austen_Pride & Prejudice_1813,Burney_Camilla_1796,1,undirected
+Austen_Mansfield Park_1814,Austen_Northanger Abbey_1803,78,undirected
+Austen_Mansfield Park_1814,Austen_Sense & Sensibility_1811,55,undirected
+Austen_Mansfield Park_1814,Austen_Pride & Prejudice_1813,72,undirected
+Austen_Mansfield Park_1814,Austen_Emma_1816,174,undirected
+Austen_Mansfield Park_1814,Austen_Persuasion_1818,152,undirected
+Austen_Emma_1816,Austen_Northanger Abbey_1803,5,undirected
+Austen_Emma_1816,Austen_Sense & Sensibility_1811,11,undirected
+Austen_Emma_1816,Austen_Pride & Prejudice_1813,66,undirected
+Austen_Emma_1816,Austen_Mansfield Park_1814,174,undirected
+Austen_Emma_1816,Austen_Persuasion_1818,111,undirected
+Austen_Emma_1816,Edgeworth_Belinda_1801,14,undirected
+Austen_Persuasion_1818,Austen_Northanger Abbey_1803,6,undirected
+Austen_Persuasion_1818,Austen_Sense & Sensibility_1811,11,undirected
+Austen_Persuasion_1818,Austen_Pride & Prejudice_1813,17,undirected
+Austen_Persuasion_1818,Austen_Mansfield Park_1814,152,undirected
+Austen_Persuasion_1818,Austen_Emma_1816,111,undirected
+Forester_commodore_hornblower_1945,Forester_lord_hornblower_1946,166,undirected
+Forester_commodore_hornblower_1945,Forester_midshipman_hornblower_1950,127,undirected
+Forester_commodore_hornblower_1945,Forester_Lt_hornblower_1952,15,undirected
+Forester_commodore_hornblower_1945,Forester_hornblower_atropos_1953,128,undirected
+Forester_commodore_hornblower_1945,Forester_hornblower_hotspur_1962,52,undirected
+Forester_lord_hornblower_1946,Forester_commodore_hornblower_1945,166,undirected
+Forester_lord_hornblower_1946,Forester_midshipman_hornblower_1950,31,undirected
+Forester_lord_hornblower_1946,Forester_Lt_hornblower_1952,1,undirected
+Forester_lord_hornblower_1946,Forester_hornblower_atropos_1953,56,undirected
+Forester_lord_hornblower_1946,Forester_hornblower_hotspur_1962,2,undirected
+Forester_lord_hornblower_1946,Sabatini_Captain Blood_1922,44,undirected
+Forester_lord_hornblower_1946,Sabatini_The Sea Hawk_1915,33,undirected
+Forester_midshipman_hornblower_1950,Forester_commodore_hornblower_1945,127,undirected
+Forester_midshipman_hornblower_1950,Forester_lord_hornblower_1946,31,undirected
+Forester_midshipman_hornblower_1950,Forester_Lt_hornblower_1952,89,undirected
+Forester_midshipman_hornblower_1950,Forester_hornblower_atropos_1953,64,undirected
+Forester_midshipman_hornblower_1950,Forester_hornblower_hotspur_1962,1,undirected
+Forester_Lt_hornblower_1952,Forester_commodore_hornblower_1945,15,undirected
+Forester_Lt_hornblower_1952,Forester_lord_hornblower_1946,1,undirected
+Forester_Lt_hornblower_1952,Forester_midshipman_hornblower_1950,89,undirected
+Forester_Lt_hornblower_1952,Forester_hornblower_atropos_1953,114,undirected
+Forester_Lt_hornblower_1952,Forester_hornblower_hotspur_1962,60,undirected
+Forester_hornblower_atropos_1953,Forester_commodore_hornblower_1945,128,undirected
+Forester_hornblower_atropos_1953,Forester_lord_hornblower_1946,56,undirected
+Forester_hornblower_atropos_1953,Forester_midshipman_hornblower_1950,64,undirected
+Forester_hornblower_atropos_1953,Forester_Lt_hornblower_1952,114,undirected
+Forester_hornblower_atropos_1953,Forester_hornblower_hotspur_1962,174,undirected
+Forester_hornblower_atropos_1953,Sabatini_Captain Blood_1922,1,undirected
+Forester_hornblower_hotspur_1962,Forester_commodore_hornblower_1945,52,undirected
+Forester_hornblower_hotspur_1962,Forester_lord_hornblower_1946,2,undirected
+Forester_hornblower_hotspur_1962,Forester_midshipman_hornblower_1950,1,undirected
+Forester_hornblower_hotspur_1962,Forester_Lt_hornblower_1952,60,undirected
+Forester_hornblower_hotspur_1962,Forester_hornblower_atropos_1953,174,undirected
+Brontë_Jane Eyre_1847,O'Brian_Post Captain_1972,18,undirected
+Brontë_Jane Eyre_1847,O'Brian_H.M.S. Surprise_1973,5,undirected
+Brontë_Jane Eyre_1847,O'Brian_Desolation Island_1977,28,undirected
+Brontë_Jane Eyre_1847,O'Brian_The Fortune of War_1979,13,undirected
+Brontë_Jane Eyre_1847,Sabatini_The Sea Hawk_1915,43,undirected
+Brontë_Jane Eyre_1847,Edgeworth_Belinda_1801,59,undirected
+Brontë_Jane Eyre_1847,Heyer_The Black Moth_1921,111,undirected
+Brontë_Jane Eyre_1847,Burney_Camilla_1796,37,undirected
+Sabatini_Captain Blood_1922,O'Brian_The Mauritius Command_1977,37,undirected
+Sabatini_Captain Blood_1922,O'Brian_The Fortune of War_1979,8,undirected
+Sabatini_Captain Blood_1922,Forester_lord_hornblower_1946,44,undirected
+Sabatini_Captain Blood_1922,Forester_hornblower_atropos_1953,1,undirected
+Sabatini_Captain Blood_1922,Sabatini_The Sea Hawk_1915,180,undirected
+Sabatini_The Sea Hawk_1915,O'Brian_H.M.S. Surprise_1973,1,undirected
+Sabatini_The Sea Hawk_1915,O'Brian_The Mauritius Command_1977,4,undirected
+Sabatini_The Sea Hawk_1915,O'Brian_Desolation Island_1977,2,undirected
+Sabatini_The Sea Hawk_1915,O'Brian_The Fortune of War_1979,1,undirected
+Sabatini_The Sea Hawk_1915,Forester_lord_hornblower_1946,33,undirected
+Sabatini_The Sea Hawk_1915,Brontë_Jane Eyre_1847,43,undirected
+Sabatini_The Sea Hawk_1915,Sabatini_Captain Blood_1922,180,undirected
+Sabatini_The Sea Hawk_1915,Heyer_The Black Moth_1921,35,undirected
+Edgeworth_Fashionable Life_1809,Austen_Sense & Sensibility_1811,14,undirected
+Edgeworth_Fashionable Life_1809,Austen_Pride & Prejudice_1813,31,undirected
+Edgeworth_Fashionable Life_1809,Edgeworth_Belinda_1801,180,undirected
+Edgeworth_Fashionable Life_1809,Burney_Camilla_1796,112,undirected
+Edgeworth_Belinda_1801,Austen_Pride & Prejudice_1813,13,undirected
+Edgeworth_Belinda_1801,Austen_Emma_1816,14,undirected
+Edgeworth_Belinda_1801,Brontë_Jane Eyre_1847,59,undirected
+Edgeworth_Belinda_1801,Edgeworth_Fashionable Life_1809,180,undirected
+Edgeworth_Belinda_1801,Heyer_The Black Moth_1921,3,undirected
+Edgeworth_Belinda_1801,Burney_Camilla_1796,143,undirected
+Heyer_The Black Moth_1921,O'Brian_Post Captain_1972,56,undirected
+Heyer_The Black Moth_1921,O'Brian_H.M.S. Surprise_1973,4,undirected
+Heyer_The Black Moth_1921,Brontë_Jane Eyre_1847,111,undirected
+Heyer_The Black Moth_1921,Sabatini_The Sea Hawk_1915,35,undirected
+Heyer_The Black Moth_1921,Edgeworth_Belinda_1801,3,undirected
+Burney_Camilla_1796,Austen_Sense & Sensibility_1811,29,undirected
+Burney_Camilla_1796,Austen_Pride & Prejudice_1813,1,undirected
+Burney_Camilla_1796,Brontë_Jane Eyre_1847,37,undirected
+Burney_Camilla_1796,Edgeworth_Fashionable Life_1809,112,undirected
+Burney_Camilla_1796,Edgeworth_Belinda_1801,143,undirected

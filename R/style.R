@@ -98,7 +98,7 @@ stylo(
   gui = FALSE
 )
 
-stylo(
+book_style <- stylo(
   #parsed.corpus = token_corpus,
   corpus.dir = "./stylo/corpus",
   analysis.type = "CA",
@@ -108,7 +108,7 @@ stylo(
   mfw.min = 100,
   mfw.max = 3000,
   custom.graph.title = "O'Brian, Austen & Co.",
-  write.jpg.file = TRUE,
+  write.jpg.file = FALSE,
   gui = FALSE
 )
 
